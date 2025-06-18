@@ -1,0 +1,86 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String?   @unique
+  password  String?
+  name      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  videos    Video[]
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Video {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  url         String
+  status      VideoStatus  @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+  processedAt DateTime?
+
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  comments    Comment[]
+  likes       VideoLike[]
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  userId    String
+  videoId   String
+  user      User      @relation(fields: [userId], references: [id])
+  video     Video     @relation(fields: [videoId], references: [id])
+  likes     CommentLike[]
+}
+
+model VideoLike {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  userId     String
+  videoId    String
+
+  user       User      @relation(fields: [userId], references: [id])
+  video      Video     @relation(fields: [videoId], references: [id])
+
+  @@unique([userId, videoId])
+}
+
+model CommentLike {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  userId     String
+  commentId  String
+
+  user       User      @relation(fields: [userId], references: [id])
+  comment    Comment   @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, commentId])
+}
+
+enum VideoStatus {
+  PENDING
+  PROCESSING
+  AVAILABLE
+  FAILED
+}

@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "extends": "@holding-fpass/eslint-config/node",
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "off"
+  }
+}
