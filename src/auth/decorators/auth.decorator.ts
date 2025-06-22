@@ -6,6 +6,8 @@ export const Authentication = createParamDecorator(
 
     const { auth } = request;
 
+    console.log(request);
+
     return data ? auth?.[data] : auth;
   },
 );

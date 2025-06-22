@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from '../types/user';
+import { UserPermissions } from '@prisma/client';
 
 interface ICreateUserParams {
   email: string;
@@ -17,6 +18,7 @@ interface IUpdateUserParams {
   email?: string;
   password?: string;
   name?: string;
+  permission?: UserPermissions;
 }
 
 interface IFindByEmailParams {
@@ -53,7 +55,7 @@ export class UsersEndpointService {
   }
 
   async updateUser(params: IUpdateUserParams): Promise<UserEntity> {
-    const { id, email, name, password } = params;
+    const { id, email, name, password, permission } = params;
 
     const userExists = await this.usersService.findById({
       id,
@@ -66,6 +68,7 @@ export class UsersEndpointService {
       email,
       name,
       password,
+      permission,
     });
   }
 

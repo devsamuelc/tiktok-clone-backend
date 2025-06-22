@@ -14,10 +14,11 @@ model User {
   email     String?   @unique
   password  String
   name      String?
+  refreshToken  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  permissions UserPermissions  @default(PENDING)
+  permission UserPermissions  @default(USER)
 
   videos    Video[]
   comments  Comment[]
@@ -29,9 +30,9 @@ model Video {
   id          String       @id @default(uuid())
   title       String
   description String?
-  url         String
+  url         String?
   status      VideoStatus  @default(PENDING)
-  createdAt   DateTime     @default(USER)
+  createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   deletedAt   DateTime?
   processedAt DateTime?
@@ -59,6 +60,9 @@ model Comment {
 model VideoLike {
   id         String    @id @default(uuid())
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
   userId     String
   videoId    String
 
@@ -68,17 +72,23 @@ model VideoLike {
   @@unique([userId, videoId])
 }
 
+
 model CommentLike {
   id         String    @id @default(uuid())
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
   userId     String
   commentId  String
+  videoId    String
 
   user       User      @relation(fields: [userId], references: [id])
   comment    Comment   @relation(fields: [commentId], references: [id])
 
   @@unique([userId, commentId])
 }
+
 
 enum VideoStatus {
   PENDING

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserEntity } from '../types/user';
+import { UserPermissions } from '@prisma/client';
 
 interface ICreateParams {
   email: string;
@@ -13,6 +14,8 @@ interface IUpdateParams {
   id: string;
   name?: string;
   email?: string;
+  refreshToken?: string | null;
+  permission?: UserPermissions;
   password?: string;
 }
 
