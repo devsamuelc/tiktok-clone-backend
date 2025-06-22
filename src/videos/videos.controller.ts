@@ -123,6 +123,18 @@ export class VideosController {
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Subir arquivo do vídeo' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Arquivo do vídeo',
+        },
+      },
+    },
+  })
   @ApiConsumes('multipart/form-data')
   async uploadVideo(
     @Authentication() authentication: IAuthentication,
