@@ -30,7 +30,7 @@ async function bootstrap() {
   await app.register(fastifyMultipart);
 
   app.enableCors({
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3001', 'http://localhost:5173'],
     credentials: true,
   });
 

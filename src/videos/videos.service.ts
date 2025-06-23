@@ -84,12 +84,53 @@ export class VideosService {
         orderBy: { createdAt: 'desc' },
         take: limit,
         skip,
+        include: {
+          _count: {
+            select: {
+              likes: {
+                where: { deletedAt: null },
+              },
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          comments: {
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
       }),
       this.prisma.video.count({ where }),
     ]);
 
+    const data = videos.map((video) => ({
+      id: video.id,
+      title: video.title,
+      description: video.description,
+      url: video.url,
+      status: video.status,
+      processedAt: video.processedAt,
+      userId: video.userId,
+      createdAt: video.createdAt,
+      updatedAt: video.updatedAt,
+      likeCount: video._count.likes,
+      comments: video.comments,
+    }));
+
     return {
-      data: videos,
+      data,
       meta: {
         total,
         page,
@@ -114,12 +155,53 @@ export class VideosService {
         orderBy: { createdAt: 'desc' },
         take: limit,
         skip,
+        include: {
+          _count: {
+            select: {
+              likes: {
+                where: { deletedAt: null },
+              },
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          comments: {
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
       }),
       this.prisma.video.count({ where }),
     ]);
 
+    const data = videos.map((video) => ({
+      id: video.id,
+      title: video.title,
+      description: video.description,
+      url: video.url,
+      status: video.status,
+      processedAt: video.processedAt,
+      userId: video.userId,
+      createdAt: video.createdAt,
+      updatedAt: video.updatedAt,
+      likeCount: video._count.likes,
+      comments: video.comments,
+    }));
+
     return {
-      data: videos,
+      data,
       meta: {
         total,
         page,

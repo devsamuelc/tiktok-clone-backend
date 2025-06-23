@@ -24,7 +24,7 @@ class LikeVideoDto {
 }
 
 @ApiTags('Video Likes')
-@Controller('video-likes')
+@Controller('videos')
 export class VideoLikesController {
   constructor(
     private readonly videoLikesEndpointService: VideoLikesEndpointService,
@@ -35,16 +35,16 @@ export class VideoLikesController {
   @ApiBearerAuth()
   @ApiBody({ type: LikeVideoDto })
   @ApiResponse({ type: VideoResponseDto })
-  @Post('/')
+  @Post('/:videoId/like')
   async like(
     @Authentication() authentication: IAuthentication,
-    @Body() body: LikeVideoDto,
+    @Param('videoId') videoId: string,
   ) {
     const { authUserId } = authentication;
 
     return this.videoLikesEndpointService.likeVideo({
       userId: authUserId,
-      videoId: body.videoId,
+      videoId,
     });
   }
 
